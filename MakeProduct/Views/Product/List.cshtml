@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "產品列表";
+}
+
+<div class="card-deck">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            var photoPath = $"~/images/{product.PhotoPath ?? "Pikachu.png"}";
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card m-3">
+                    <div class="card-header">
+                        <h3>@product.ProductName</h3>
+                    </div>
+
+                    <img src="@photoPath" class="card-img-top imagesThumbnail" asp-append-version="true" />
+
+                    <div class="card-footer text-center">
+                        <a asp-controller="Product" asp-action="Detail" asp-route-id="@product.Id" class="btn btn-primary m-1">查看</a>
+                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-danger m-1">編輯</a>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger m-1">刪除</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

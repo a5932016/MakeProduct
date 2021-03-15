@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using MakeProduct.Models.Product;
 using Microsoft.Extensions.Configuration;
+using MakeProduct.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MakeProduct
 {
@@ -25,8 +27,16 @@ namespace MakeProduct
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddSingleton<IProductRepository, MockProductRepository>();
+            services.AddDbContextPool<AppDbContext>(
+                option => option.UseSqlServer(_configuration.GetConnectionString("ProductDBConnection")));
+
+            services.AddMvc().AddXmlSerializerFormatters();
+
+            // SQL資料庫
+            services.AddScoped<IProductRepository, SQLProductRepository>();
+
+            // 測試資料庫
+            //services.AddSingleton<IProductRepository, MockProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
